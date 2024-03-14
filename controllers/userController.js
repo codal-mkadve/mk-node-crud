@@ -1,4 +1,5 @@
 const {User}  = require('../models/index');
+const { v4: uuidv4 } = require('uuid');
 
 const UserController = {
   // Get all users
@@ -26,12 +27,24 @@ const UserController = {
     }
   },
 
+  bulkCreateUsers: async (req, res) => {
+    try {
+      // The request body should be an array of user objects
+      const newUsers = await User.bulkCreate(req.body);
+      res.status(201).json(newUsers);
+    } catch (error) {
+      res.status(400).send(error.message);
+    } 
+  },
+
   // Create a new user
   createUser: async (req, res) => {
     try {
-      const newUser = await User.create(req.body);
+      const id = uuidv4(); // Generate a new UUID
+      const newUser = await User.create({ id, ...req.body });
       res.status(201).json(newUser);
     } catch (error) {
+      console.log('error', error);
       res.status(400).send(error.message);
     }
   },
