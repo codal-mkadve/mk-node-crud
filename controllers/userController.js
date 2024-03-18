@@ -37,7 +37,6 @@ const UserController = {
     } 
   },
 
-  // Create a new user
   createUser: async (req, res) => {
     try {
       const id = uuidv4(); // Generate a new UUID
@@ -63,6 +62,16 @@ const UserController = {
       }
     } catch (error) {
       res.status(400).send(error.message);
+    }
+  },
+
+  // Get total user count
+  getTotalUserCount: async (req, res) => {
+    try {
+      const totalCount = await User.count();
+      res.json({ count: totalCount });
+    } catch (error) {
+      res.status(500).send(error.message);
     }
   },
 
