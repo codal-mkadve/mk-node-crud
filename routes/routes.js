@@ -12,6 +12,10 @@ router.use(authMiddleware);
 
 router.get("/totalCounts", UserController.getTotalUserCount);
 
+router.post("/bulk-create", UserController.bulkCreateUsers);
+
+router.delete("/delete-all", UserController.deleteAllUsers);
+
 router
   .route("/")
   .post(UserController.createUser)

@@ -1,10 +1,9 @@
-const {User}  = require('../models/index');
-const { v4: uuidv4 } = require('uuid');
+const { User } = require("../models/index");
+const { v4: uuidv4 } = require("uuid");
 
 const UserController = {
   // Get all users
   getAllUsers: async (req, res) => {
-    console.log('User',User)
     try {
       const users = await User.findAll();
       res.json(users);
@@ -20,7 +19,7 @@ const UserController = {
       if (user) {
         res.json(user);
       } else {
-        res.status(404).send('User not found');
+        res.status(404).send("User not found");
       }
     } catch (error) {
       res.status(500).send(error.message);
@@ -34,7 +33,7 @@ const UserController = {
       res.status(201).json(newUsers);
     } catch (error) {
       res.status(400).send(error.message);
-    } 
+    }
   },
 
   createUser: async (req, res) => {
@@ -43,7 +42,6 @@ const UserController = {
       const newUser = await User.create({ id, ...req.body });
       res.status(201).json(newUser);
     } catch (error) {
-      console.log('error', error);
       res.status(400).send(error.message);
     }
   },
@@ -52,13 +50,13 @@ const UserController = {
   updateUser: async (req, res) => {
     try {
       const updated = await User.update(req.body, {
-        where: { id: req.params.id }
+        where: { id: req.params.id },
       });
       if (updated) {
         const updatedUser = await User.findByPk(req.params.id);
         res.json(updatedUser);
       } else {
-        res.status(404).send('User not found');
+        res.status(404).send("User not found");
       }
     } catch (error) {
       res.status(400).send(error.message);
@@ -79,17 +77,30 @@ const UserController = {
   deleteUserById: async (req, res) => {
     try {
       const deleted = await User.destroy({
-        where: { id: req.params.id }
+        where: { id: req.params.id },
       });
       if (deleted) {
-        res.send('User deleted');
+        res.send("User deleted");
       } else {
-        res.status(404).send('User not found');
+        res.status(404).send("User not found");
       }
     } catch (error) {
       res.status(500).send(error.message);
     }
-  }
+  },
+
+  deleteAllUsers: async (req, res) => {
+    try {
+      console.log('req deleteAllUsers called',req)
+      await User.destroy({ where: {}, truncate: true });
+      res.send({ message: "All users have been deleted successfully." });
+    } catch (error) {
+      res.status(500).send({
+        message: "Error occurred while trying to delete all users.",
+        error: error.message,
+      });
+    }
+  },
 };
 
 module.exports = UserController;
