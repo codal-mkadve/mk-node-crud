@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const config = require('../config.json')[process.env.NODE_ENV || 'development'];
-
+console.log('config',config,process.env.NODE_ENV);
 const sequelize = new Sequelize(config.database, config.username, config.password, config);
 
 const DataTypes = Sequelize.DataTypes;
